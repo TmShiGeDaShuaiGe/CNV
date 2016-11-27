@@ -1,6 +1,6 @@
-# CNV_XHMM
-# Ths project is to detect copy numebr variation (CNV) in Whole-Exome Seqeuncing Data. 
-# The current goal is to dealing with the bam files in odre to get the vcf file.
+#### CNV_XHMM
+#### Ths project is to detect copy numebr variation (CNV) in Whole-Exome Seqeuncing Data. 
+#### The current goal is to dealing with the bam files in odre to get the vcf file.
 
 source:
 1. GATK software : https://software.broadinstitute.org/gatk/download/.
