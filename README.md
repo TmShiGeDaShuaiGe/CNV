@@ -2,7 +2,7 @@
 #### Ths project is to detect copy numebr variation (CNV) in Whole-Exome Seqeuncing Data. 
 #### The current goal is to dealing with the bam files in odre to get the vcf file.
 
-## **source** <br />
+## **source**<br />
 1. GATK software : https://software.broadinstitute.org/gatk/download/. <br />
 2. XHMM software : http://atgu.mgh.harvard.edu/xhmm/tutorial.shtml. In the downloaded and uncompressed folder `statgen-xhmm-*sources/scripts`, `interval_list_to_pseq_reg` command will be used.<br />
 3. PLINK/SEQ serial commandlines : download and install from http://atgu.mgh.harvard.edu/plinkseq/download.shtml. Please download the Core resource databases (hg19) by this website.<br />
@@ -20,9 +20,9 @@ Example : Here is an example of a simple query that retrieves all the RefSeq Gen
 **PART I** : Run GATK depth of coverage to get sequencing depths --> combine GATK depth of converage outputs
 **PART II** : please see `main.sh`. 
 
-## **Tips**
-You can consult the XHMM standard workflow at its homeage. Or consult the whole procedure from ref.[4] 
-
+## **Tips**<br />
+1. You can consult the XHMM standard workflow at its homeage. Or consult the whole procedure from ref.[4]<br />
+2. In all of the shell scrits, the single funcation name is used by exposing the absolute path in the `~/.bashrc` file in the Linux System.<br />
 
 ## **Reference** <br />
 1.	Fromer M, Moran JL, Chambert K, et al. Discovery and statistical genotyping of copy-number variation from whole-exome sequencing depth. Am J Hum Genet. Oct 5 2012;91(4):597-607. <br />
