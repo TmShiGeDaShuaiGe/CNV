@@ -5,7 +5,7 @@
 ## **source** <br />
 1. GATK software : https://software.broadinstitute.org/gatk/download/. <br />
 2. XHMM software : http://atgu.mgh.harvard.edu/xhmm/tutorial.shtml. You can consult the XHMM standard workflow by this website.<br />
-3. PLINK/SEQ serial commandlines : http://atgu.mgh.harvard.edu/plinkseq/download.shtml. please download the Core resource databases (hg19) by this website.<br />
+3. PLINK/SEQ serial commandlines : download and install from http://atgu.mgh.harvard.edu/plinkseq/download.shtml. Please download the Core resource databases (hg19) by this website.<br />. In the downloaded and uncompressed folder `statgen-xhmm-*sources/scripts`, interval_list_to_pseq_reg will be used.
 4. Building the resource databases : GTFs from the UCSC table browser were downloaded for hg19, for RefSeq, CCDS and GENCODE transcripts
 for example, download the `refseq-hg19.gtf.gz` from the UCSC Table Brower https://genome.ucsc.edu/cgi-bin/hgTables. <br />
 Example : Here is an example of a simple query that retrieves all the RefSeq Genes records in the position range chr7:26906938-26940301 on the May 2004 human genome assembly.The Table Browser will display the records for the RefSeq accessions NM_005522, NM_153620, NM_006735, NM_153632, NM_030661, and NM_153631.  
