@@ -2,7 +2,7 @@
 #### Ths project is to detect copy numebr variation (CNV) in Whole-Exome Seqeuncing Data. 
 #### The current goal is to dealing with the bam files in odre to get the vcf file.
 
-source:<br />
+## **source** <br />
 1. GATK software : https://software.broadinstitute.org/gatk/download/. <br />
 2. XHMM software : http://atgu.mgh.harvard.edu/xhmm/tutorial.shtml. You can consult the XHMM standard workflow by this website.<br />
 3. PLINK/SEQ serial commandlines : http://atgu.mgh.harvard.edu/plinkseq/download.shtml. please download the Core resource databases (hg19) by this website.<br />
