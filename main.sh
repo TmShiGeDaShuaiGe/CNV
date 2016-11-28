@@ -1,27 +1,32 @@
 #! /bin/sh
 #$ -S /bin/bash
 
-folder="/home/mt3138/whicap_XHMM/" # my workplace
+# Directory path settings.
+WORKSPACE_PATH="/home/mt3138/whicap_XHMM"
+DATA_PATH="/mnt/mfs/hgrcgrid/shared"
 
-# GATK enviroment
-GATKJAR="/mnt/mfs/hgrcgrid/homes/mt3138/software/GenomeAnalysisTK-3.6/GenomeAnalysisTK.jar" # my path way the jar file of GATK
-JAVA="java -Xmx3G" 
-GATK="$JAVA -jar "${GATKJAR}
 
-# soruces which can be downloaded from the README.md
-PARAMS="/home/mt3138/software/statgen-xhmm-cc14e528d909/params.txt"
-interval_list_to_pseq_reg="/home/mt3138/software/statgen-xhmm-cc14e528d909/sources/scripts/interval_list_to_pseq_reg"
-REF="/mnt/mfs/hgrcgrid/shared/GATK_Resources/2.8/b37/human_g1k_v37_decoy.fasta"
-DBSNP="/mnt/mfs/hgrcgrid/shared/GATK_Resources/dbsnp_137.b37.vcf"
-TARGET="/home/mt3138/whicap_XHMM/EXOME.interval_list"
-seqdb="/home/mt3138/whicap_XHMM/XHMM_Resource/seqdb.hg19"
+# Software path settings.
+GATK_PATH="/mnt/mfs/hgrcgrid/homes/mt3138/software/GenomeAnalysisTK-3.6"
+GATK="java -Xmx3G -jar "${GATK_PATH}"/GenomeAnalysisTK.jar"
 
-DATA="DATA.RD.txt" # output from step 1 and step 2, by which get read depth metric 
+XHMM_PATH=${WORKSPACE_PATH}"/software/statgen-xhmm-cc14e528d909"
+XHMM_PARAMS=${XHMM_PATH}"/params.txt"
+interval_list_to_pseq_reg=${XHMM_PATH}"/sources/scripts/interval_list_to_pseq_reg"
+
+
+# Data materials (see README.md to download)
+REF=${DATA_PATH}"/GATK_Resources/2.8/b37/human_g1k_v37_decoy.fasta"
+DBSNP=${DATA_PATH}"/GATK_Resources/dbsnp_137.b37.vcf"
+TARGET=${WORKSPACE_PATH}"/EXOME.interval_list"
+seqdb=${WORKSPACE_PATH}"/XHMM_Resource/seqdb.hg19"
+DATA=${WORKSPACE_PATH}"/DATA.RD.txt" # output from step 1 and step 2, by which get read depth metric 
+
 
 # step 3. Optionally, run GATK to calculate the per-target GC content and create a list of the targets with extreme GC content:
 # 3.1
-out1="/home/mt3138/whicap_XHMM/DATA.locus_GC.txt"
-out2="/home/mt3138/whicap_XHMM/extreme_gc_targets.txt"
+out1=${WORKSPACE_PATH}"/DATA.locus_GC.txt"
+out2=${WORKSPACE_PATH}"/extreme_gc_targets.txt"
 $GATK \
  -R $REF \
  -T GCContentByInterval \
@@ -31,11 +36,11 @@ $GATK \
 cat $out1 | awk '{if ($2 < 0.1 || $2 > 0.9) print $1}' > $out2
 echo "-----------------------------------------------------------------------------------------------"
 # step 4. Optionally, run PLINK/Seq to calculate the fraction of repeat-masked bases in each target and create a list of those to filter out. These four optional steps calculate the fraction of repeat-masked bases (Smit and Hubley, 2008) in each target and creates a list of targets with low complexity for you to filter out up front.
-out3="/home/mt3138/whicap_XHMM/EXOME.targets.reg"
-out4="/home/mt3138/whicap_XHMM/EXOME.targets.LOCDB.loc-load"
-out5="/home/mt3138/whicap_XHMM/DATA.locus_complexity.txt"
-out6="/home/mt3138/whicap_XHMM/low_complexity_targets.txt"
-LOCDB="/home/mt3138/whicap_XHMM/EXOME.targets.LOCDB"
+out3=${WORKSPACE_PATH}"/EXOME.targets.reg"
+out4=${WORKSPACE_PATH}"/EXOME.targets.LOCDB.loc-load"
+out5=${WORKSPACE_PATH}"/DATA.locus_complexity.txt"
+out6=${WORKSPACE_PATH}"/low_complexity_targets.txt"
+LOCDB=${WORKSPACE_PATH}"/EXOME.targets.LOCDB"
 ##if bed file is in the chr:bp1-bp2 format
 #cat ${TARGET} | \
 #awk 'BEGIN{OFS="\t"; print "#CHR\tBP1\tBP2\tID"} {split($1,a,":"); chr=a[1]; if (match(chr,"chr")==0) {chr="chr"chr} split(a[2],b,"-"); bp1=b[1]; bp2=bp1; if (length(b) > 1) {bp2=b[2]} print chr,bp1,bp2,NR}' \
@@ -47,17 +52,17 @@ $interval_list_to_pseq_reg $TARGET > $out3
 pseq . loc-load --locdb $LOCDB --file $out3 --group targets --out $out4
 # 4.3. Run Plink/Seq to calculate the per-target repeat-masking fraction (download the seqdb file along with the Plink/Seq code, as described above)
 pseq . loc-stats --locdb $LOCDB --group targets --seqdb $seqdb | awk '{if (NR > 1) print $_}' | sort -k1 -g | awk '{print $10}' | paste ${TARGET} - | awk '{print $1"\t"$2}' > $out5
-##E.G. pseq . loc-stats --locdb ./EXOME.targets.LOCDB --group targets --seqdb /home/mt3138/whicap_XHMM/seqdb.hg19 | awk '{if (NR > 1) print $_}' | sort -k1 -g | awk '{print $10}' | paste /home/mt3138/whicap_GATK/targets/SeqCap_EZ_Exome_v3_capture.bed - | awk '{print $1"\t"$2}' > DATA.locus_complexity.txt
+##E.G. pseq . loc-stats --locdb ./EXOME.targets.LOCDB --group targets --seqdb ${WORKSPACE_PATH}/seqdb.hg19 | awk '{if (NR > 1) print $_}' | sort -k1 -g | awk '{print $10}' | paste /home/mt3138/whicap_GATK/targets/SeqCap_EZ_Exome_v3_capture.bed - | awk '{print $1"\t"$2}' > DATA.locus_complexity.txt
 # 4.4. Create a list of all exome targets to be excluded, based on the fraction of repeat- masked sequence (as calculated by RepeatMasker; Smit and Hubley, 2008)
 cat $out5 | awk '{if ($2 > 0.25) print $1}' > $out6
 
 echo "-----------------------------------------------------------------------------------------------"
 # step 5. Use the XHMM matrix command to process the read-depth matrix. Filters samples and targets and then mean-centers the targets:
-excludedTargets="/home/mt3138/whicap_XHMM/DATA.filtered_centered.RD.txt.filtered_targets.txt"
-excludedSamples="/home/mt3138/whicap_XHMM/DATA.filtered_centered.RD.txt.filtered_samples.txt"
-extremeGCtargets="/home/mt3138/whicap_XHMM/extreme_gc_targets.txt"
-lowComplexityTargets="/home/mt3138/whicap_XHMM/low_complexity_targets.txt"
-out7="/home/mt3138/whicap_XHMM/DATA.filtered_centered.RD.txt"
+excludedTargets=${WORKSPACE_PATH}"/DATA.filtered_centered.RD.txt.filtered_targets.txt"
+excludedSamples=${WORKSPACE_PATH}"/DATA.filtered_centered.RD.txt.filtered_samples.txt"
+extremeGCtargets=${WORKSPACE_PATH}"/extreme_gc_targets.txt"
+lowComplexityTargets=${WORKSPACE_PATH}"/low_complexity_targets.txt"
+out7=${WORKSPACE_PATH}"/DATA.filtered_centered.RD.txt"
 xhmm --matrix \
  --centerData \
  --centerType target \
@@ -77,7 +82,7 @@ xhmm --matrix \
 
 echo "-----------------------------------------------------------------------------------------------"
 # step 6. Runs PCA on mean-centered data:
-out8="/home/mt3138/whicap_XHMM/DATA.RD_PCA"
+out8=${WORKSPACE_PATH}"/DATA.RD_PCA"
 xhmm --PCA \
  -r $out7 \
  --PCAfiles $out8 
@@ -88,7 +93,7 @@ xhmm --PCA \
 
 echo "-----------------------------------------------------------------------------------------------"
 # step 7. Remove the top principal components and reconstruct a normalized read depth matrix. Normalizes mean-centered data using PCA information:
-out9="/home/mt3138/whicap_XHMM/DATA.PCA_normalized.txt"
+out9=${WORKSPACE_PATH}"/DATA.PCA_normalized.txt"
 xhmm --normalize \
  --PCnormalizeMethod PVE_mean \
  --PVE_mean_factor 0.7 \
@@ -98,9 +103,9 @@ xhmm --normalize \
 
 echo "-----------------------------------------------------------------------------------------------"
 # step 8. Filters and z-score centers (by sample) the PCA-normalized data:
-excludedPCAtargets="/home/mt3138/whicap_XHMM/DATA.PCA_normalized.filtered.sample_zscores.RD.txt.filtered_targets.txt"
-excludedPCAsamples="/home/mt3138/whicap_XHMM/DATA.PCA_normalized.filtered.sample_zscores.RD.txt.filtered_samples.txt"
-out10="/home/mt3138/whicap_XHMM/DATA.PCA_normalized.filtered.sample_zscores.RD.txt"
+excludedPCAtargets=${WORKSPACE_PATH}"/DATA.PCA_normalized.filtered.sample_zscores.RD.txt.filtered_targets.txt"
+excludedPCAsamples=${WORKSPACE_PATH}"/DATA.PCA_normalized.filtered.sample_zscores.RD.txt.filtered_samples.txt"
+out10=${WORKSPACE_PATH}"/DATA.PCA_normalized.filtered.sample_zscores.RD.txt"
 xhmm --matrix \
  --centerData \
  --centerType sample \
@@ -113,7 +118,7 @@ xhmm --matrix \
 
 echo "-----------------------------------------------------------------------------------------------"
 # step 9. Filters original read-depth data to be the same as filtered, normalized data:
-out11="/home/mt3138/whicap_XHMM/DATA.same_filtered.RD.txt"
+out11=${WORKSPACE_PATH}"/DATA.same_filtered.RD.txt"
 xhmm --matrix \
  --excludeTargets $excludedTargets \
  --excludeTargets $excludedPCAtargets \
@@ -124,11 +129,11 @@ xhmm --matrix \
 
 echo "-----------------------------------------------------------------------------------------------"
 ## step 10.Run the HMM Viterbi algorithm to call CNVs in each sample. Discovers CNVs in normalized data:
-xcnv="/home/mt3138/whicap_XHMM/DATA.xcnv"
-aux_xcnv="/home/mt3138/whicap_XHMM/DATA.aux_xcnv"
-out12="/home/mt3138/whicap_XHMM/DATA"
+xcnv=${WORKSPACE_PATH}"/DATA.xcnv"
+aux_xcnv=${WORKSPACE_PATH}"/DATA.aux_xcnv"
+out12=${WORKSPACE_PATH}"/DATA"
 xhmm --discover \
- -p $PARAMS \
+ -p $XHMM_PARAMS \
  -r $out10 \
  -R $out11 \
  -c $xcnv \
@@ -137,9 +142,9 @@ xhmm --discover \
 
 echo "-----------------------------------------------------------------------------------------------"
 ## step 11. Genotypes discovered CNVs in all samples:
-vcf="/home/mt3138/whicap_XHMM/DATA.vcf"
+vcf=${WORKSPACE_PATH}"/DATA.vcf"
 xhmm --genotype \
- -p $PARAMS \
+ -p $XHMM_PARAMS \
  -r $out10 \
  -R $out11 \
  -g $xcnv \
@@ -147,10 +152,10 @@ xhmm --genotype \
  -v $vcf
 
 echo "-----------------------------------------------------------------------------------------------"
-#refseq="/home/mt3138/whicap_XHMM/XHMM_Resource/"
-locdb="/home/mt3138/whicap_XHMM/XHMM_Resource/locdb"
+#refseq=${WORKSPACE_PATH}"/XHMM_Resource/"
+locdb=${WORKSPACE_PATH}"/XHMM_Resource/locdb"
 ## step12. Annotate exome targets with their corresponding genes:
-out12="/home/mt3138/whicap_XHMM/annotated_targets.refseq"
+out12=${WORKSPACE_PATH}"/annotated_targets.refseq"
 pseq . loc-intersect --group refseq --locdb $locdb --file $TARGET --out $out12 
 
 
