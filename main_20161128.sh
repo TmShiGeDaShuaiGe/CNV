@@ -36,11 +36,19 @@ $GATK \
 cat $out1 | awk '{if ($2 < 0.1 || $2 > 0.9) print $1}' > $out2
 echo "-----------------------------------------------------------------------------------------------"
 # step 4. Optionally, run PLINK/Seq to calculate the fraction of repeat-masked bases in each target and create a list of those to filter out. These four optional steps calculate the fraction of repeat-masked bases (Smit and Hubley, 2008) in each target and creates a list of targets with low complexity for you to filter out up front.
+<<<<<<< Updated upstream
 out3=${WORKSPACE_PATH}"/EXOME.targets.reg"
 out4=${WORKSPACE_PATH}"/EXOME.targets.LOCDB.loc-load"
 out5=${WORKSPACE_PATH}"/DATA.locus_complexity.txt"
 out6=${WORKSPACE_PATH}"/low_complexity_targets.txt"
 LOCDB=${WORKSPACE_PATH}"/EXOME.targets.LOCDB"
+=======
+out3="./EXOME.targets.reg"
+out4="/home/mt3138/whicap_XHMM/EXOME.targets.LOCDB.loc-load"
+out5="/home/mt3138/whicap_XHMM/DATA.locus_complexity.txt"
+out6="/home/mt3138/whicap_XHMM/low_complexity_targets.txt"
+LOCDB="/home/mt3138/whicap_XHMM/EXOME.targets.LOCDB"
+>>>>>>> Stashed changes
 ##if bed file is in the chr:bp1-bp2 format
 #cat ${TARGET} | \
 #awk 'BEGIN{OFS="\t"; print "#CHR\tBP1\tBP2\tID"} {split($1,a,":"); chr=a[1]; if (match(chr,"chr")==0) {chr="chr"chr} split(a[2],b,"-"); bp1=b[1]; bp2=bp1; if (length(b) > 1) {bp2=b[2]} print chr,bp1,bp2,NR}' \
