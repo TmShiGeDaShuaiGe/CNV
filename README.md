@@ -26,24 +26,25 @@ The following instractions is to explain how to download all RefSeq genes record
 
 ### PART I
  The input files are lists of BRSRed bam files generated from the upstream steps.  
-1. Run GATK depth of coverage to get sequencing depths  
+1. Run GATK depth of coverage to get sequencing depths.<br />
 		`run_depthOfCoverage.group.MT.sh` invoke `combine_depth_of_coverage.sh`.  
 1. combine GATK depth of converage outputs. `combine_depth_of_coverage.sh`.  
 
 ### PART II
 
-please see `main.sh`. 
+  please see `main.sh`.   
 
 ## Tips
 
 1. You can consult the XHMM standard workflow at its homepage. Or consult the whole procedure from ref.[4]
 1. In all of the shell scrits, the single funcation name is used by exposing the absolute path in the `~/.bashrc` file in the Linux System.
 1. In the preparation of Read depth data, the qsub serial command lines are used.
-1. Please take care the vertion of human database, since here we use hg19.
+1. Please take care the vertion of human database, since here we use hg19.<br />
+
 ## Abbrivation
 
-1. MT : Min Tang
-1. BQSR : Base Quility Score Recaribation
+1. MT : Min Tang <br />
+1. BQSR : Base Quility Score Recaribation <br />
 
 ## Reference
 
