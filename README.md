@@ -25,26 +25,35 @@ The following instractions is to explain how to download all RefSeq genes record
 ## Workflow
 
 ### PART I
- The input files are lists of BRSRed bam files generated from the upstream steps.  
-1. Run GATK depth of coverage to get sequencing depths.<br />
-		`run_depthOfCoverage.group.MT.sh` invoke `combine_depth_of_coverage.sh`.  
-1. combine GATK depth of converage outputs. `combine_depth_of_coverage.sh`.  
+
+The lists of BRSRed BAM files, generated from the upstream steps, are used as input files in this step.
+
+1. Calculate sequencing depths using GATK with the shell `run_depthOfCoverage.group.MT.sh` which invokes `combine_depth_of_coverage.sh`.
+1. Combine sequencing depths outputed by GATK with `combine_depth_of_coverage.sh`.  
+
 
 ### PART II
 
-  please see `main.sh`.   
+All processes are writte in the `main.sh` file.
+
+
 
 ## Tips
 
-1. You can consult the XHMM standard workflow at its homepage. Or consult the whole procedure from ref.[4]
-1. In all of the shell scrits, the single funcation name is used by exposing the absolute path in the `~/.bashrc` file in the Linux System.
-1. In the preparation of Read depth data, the qsub serial command lines are used.
-1. Please take care the vertion of human database, since here we use hg19.<br />
+1. A XHMM standard workflow is available on XHMM home page and reference 4.
+1. To use shell scripts, software path should be exposed by writting in the `~/.bashrc` file. 
+1. The qsub system is used for preparation of read depth data.
+1. The version of human genome database should be **hg19**.
+
+
 
 ## Abbrivation
 
 1. MT : Min Tang <br />
 1. BQSR : Base Quility Score Recaribation <br />
+
+
+
 
 ## Reference
 
@@ -52,3 +61,5 @@ The following instractions is to explain how to download all RefSeq genes record
 1.	Li H, Durbin R. Fast and accurate short read alignment with Burrows-Wheeler transform. Bioinformatics. Jul 15 2009;25(14):1754-1760.
 1.	McKenna A, Hanna M, Banks E, et al. The Genome Analysis Toolkit: a MapReduce framework for analyzing next-generation DNA sequencing data. Genome Res. Sep 2010;20(9):1297-130.
 1.  Menachem Fromer and Shaun M. Purcell. Using XHMM software to detect copy number variation in whole-exome sequencing data. In Current Protocols in Human Genetics. John Wiley and Sons, Inc., 2014.
+
+
