@@ -1,1 +1,2 @@
 data/DATA.RD.txt.gz filter=lfs diff=lfs merge=lfs -text
+DATA.RD.txt filter=lfs diff=lfs merge=lfs -text
