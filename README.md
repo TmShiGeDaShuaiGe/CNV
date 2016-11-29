@@ -14,13 +14,15 @@ In addition to PLINK/SEQ software, the Core resource databases (hg19) is also re
 1. [UCSC database](https://genome.ucsc.edu/cgi-bin/hgTables) <br />
 Data resources of RefSeq (e.g., `refseq-hg19.gtf.gz`), CCDS, and GENCODE transcripts in hg19 version with GTF fromat are required to be downloaded from UCSC database.<br />
 The following instractions is to explain how to download all RefSeq genes records between the position range chr7:26906938-26940301 on the May 2004 human genome assembly.
+    1. Set **clade** with `Mammal`.
     1. Set **genome** with `Human`.
-    1. Set **assembly** with `May 2004 (NCBI35/hg17)`.
+    1. Set **assembly** with `Feb 2009 (GRCh37/hg19)`.
     1. Set **group** with `Genes and Gene Predictions`.
     1. Set **track** with `RefSeq Genes`.
-    1. Set **region** with **position**, and input `chr7:26906938-26940301` into **position** field. 
+    1. Set **table** with `refGene`.
+    1. Set **output format** with `GTF - gene transfer format`. Note: do not use brower to display and save the results
+    1. Set **output file** with `refseq-hg19.gtf`.
     1. Clike **get output** button.
-
 
 ## Workflow
 
