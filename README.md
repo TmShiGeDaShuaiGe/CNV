@@ -26,7 +26,7 @@ The following instractions is to explain how to download all RefSeq genes record
 
 ## Workflow
 
-## Optional PART <br />
+### Optional PART <br />
   The protocal prefers to use *.interval_list format for exonic target regions. Here you can converts the *.bed file to *.intercal_list by `bin/bedToIntervalList.picard.sh`. In fact, both of the formats are acceptble by pseq here and GATK. But the difference are unknown.  
 
 ### PART I
