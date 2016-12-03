@@ -1,8 +1,8 @@
 # large files #
 ###################
-SeqCap_EZ_Exome_v3_capture.bed
-SeqCap_EZ_Exome_v3_capture.interval_list
 source
+data
+.gitignore
 
 # Compiled source #
 ###################
